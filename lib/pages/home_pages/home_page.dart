@@ -1,29 +1,39 @@
+import 'package:capstone_flutter/provider/map_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width * 1,
         height: MediaQuery.of(context).size.height * 1,
         child: Stack(
           children: [
-            NaverMap(
-              options: NaverMapViewOptions(
-                  /* initialCameraPosition: NCameraPosition(
-                target: NLatLng(
-                    NaverMapModelRepository.lati, NaverMapModelRepository.long),
-                zoom: 10,
-                bearing: 0,
-                tilt: 0,
-              ),*/
+            Consumer<MapProvider>(
+              builder: (context, mapProvider, child) {
+                return NaverMap(
+                  options: NaverMapViewOptions(
+                    initialCameraPosition: NCameraPosition(
+                      target: NLatLng(mapProvider.lat!, mapProvider.lng!),
+                      zoom: 17,
+                      bearing: 0,
+                      tilt: 0,
+                    ),
                   ),
-              onMapReady: (controller) {
-                print("네이버 맵 로딩됨!");
+                  onMapReady: (controller) {
+                    print("네이버 맵 로딩됨!");
+                  },
+                );
               },
             ),
             Positioned(
@@ -39,7 +49,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(context, '/store_list');
                   },
-                  child: Row(
+                  child: const Row(
                     children: [
                       Icon(
                         Icons.list,
@@ -64,7 +74,7 @@ class HomePage extends StatelessWidget {
                       border: Border.all(
                           width: 2, color: Colors.black.withOpacity(0.3))),
                   child: Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
                     child: (Icon(
                       Icons.my_location_outlined,
                       size: 30,
@@ -73,7 +83,7 @@ class HomePage extends StatelessWidget {
                   ),
                 )),
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               child: Container(
                 width: 360,
                 height: 44,
@@ -84,8 +94,8 @@ class HomePage extends StatelessWidget {
                       width: 2,
                       color: Colors.black.withOpacity(0.3),
                     )),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Row(
                     children: [
                       Icon(

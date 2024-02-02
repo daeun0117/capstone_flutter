@@ -1,6 +1,4 @@
-import 'package:capstone_flutter/provider/map_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AccessMyLocation extends StatelessWidget {
   const AccessMyLocation({super.key});
@@ -22,22 +20,17 @@ class AccessMyLocation extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               )),
-          Consumer<MapProvider>(
-            builder: (context, mapProvider, child) {
-              return TextButton(
-                onPressed: () {
-                  mapProvider.getLocation();
-                  Navigator.pushNamed(context, '/login_success');
-                },
-                child: Text(
-                  '앱을 사용하는 동안 허용',
-                  style: TextStyle(
-                    color: const Color(0xFF007AFF),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              );
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/login_success');
             },
+            child: Text(
+              '앱을 사용하는 동안 허용',
+              style: TextStyle(
+                color: const Color(0xFF007AFF),
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
           TextButton(
               onPressed: () {},

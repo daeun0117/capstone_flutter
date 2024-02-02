@@ -1,5 +1,6 @@
 import 'package:capstone_flutter/components/define_color.dart';
 import 'package:capstone_flutter/mvvm/token_view_model.dart';
+import 'package:capstone_flutter/provider/map_provider.dart';
 import 'package:capstone_flutter/service/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,18 +14,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isChecked = false;
-
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
   final ApiClient _apiClient = ApiClient();
-
   bool _showPassword = false;
 
   @override
   Widget build(BuildContext context) {
     TokenViewModel tokenViewModel =
         Provider.of<TokenViewModel>(context, listen: false);
+    MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
 
     Future<void> login() async {
       dynamic res = await _apiClient.login(
@@ -42,10 +41,8 @@ class _LoginPageState extends State<LoginPage> {
       if (res['isSuccess'] == true) {
         tokenViewModel.updateAccessToken(res['data']['accessToken']);
         tokenViewModel.updateRefreshToken(res['data']['refreshToken']);
-        Navigator.pushNamed(context, '/access_my-location');
-        //print(res);
-        //print(tokenViewModel.accessToken);
-        //accessLocationDialog()
+        await mapProvider.locateMe(); // 로그인을 성공하면 locateMe 호출
+        Navigator.pushNamed(context, '/login_success');
       } else {
         print(res);
       }
